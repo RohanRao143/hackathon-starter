@@ -1,0 +1,10 @@
+extends ../layout
+
+block content
+    .page-header
+        h3 Sports list;
+    ul
+        each sport in sports
+            li= sport.name
+        else
+            li There are no values

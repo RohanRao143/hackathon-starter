@@ -39,13 +39,30 @@ exports.createSport = (req, res, next) => {
         }
 
         sport.save((err) => {
-            if(err){return next(err);}
+            if(err){
+                req.flash('errors', {msg:'sport cannot be saved'});
+
+                return res.redirect('/createSportForm');
+
+            }
         });
     });
 };
 
+exports.listSports = (req, res) => {
+Sport.find({}, (err, sports) => {
+    res.render('sport/sportslist', {sports:sports});
+});
+};
 
-
+exports.displaySport = (req, res) => {
+    Sport.findOne({name:req.params.name}, (err, sport) => {
+        if(err){
+            req.flash('errors', {msg:'sport cannot be displayed'});
+        }
+        res.render('sport/sport', {sport:sport});
+    });
+};
 
 /*
 exports.getLogin = (req, res) => {

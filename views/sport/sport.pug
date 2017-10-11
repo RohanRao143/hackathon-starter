@@ -6,3 +6,17 @@ block content
     ul
        li= sport.name
        li= sport.type
+    form.form-horizontal(method='POST' action='/deletesport')
+        input(type='hidden', name='_csrf', value=_csrf)
+        input(type='hidden', name='name', value=sport.name)
+        .form-group
+            .col-sm-offset-3.col-sm-7
+                button.btn.btn-success(type='submit')
+                    i.fa.fa-user-plus
+                    | Delete
+    .col-sm-offset-3.col-sm-7
+        a.btn.btn-success(type='submit' href='/update/'+sport.name)
+            i.fa.fa-user-plus
+            | Update
+
+

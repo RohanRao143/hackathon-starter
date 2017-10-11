@@ -16,15 +16,7 @@ exports.createSportForm = (req, res) => {
 };
 
 exports.createSport = (req, res, next) => {
-    // res.assert('name','sport is not valid');
-    // res.assert('type', 'there is no such type');
 
-    // const errors =req.validationErrors();
-
-    // if(errors) {
-    //     req.flash('errors',errors);
-    //     return res.redirect('/createSportForm');
-    // }
 
     const sport = new Sport({
        name: req.body.name,
@@ -58,12 +50,50 @@ Sport.find({}, (err, sports) => {
 exports.displaySport = (req, res) => {
     Sport.findOne({name:req.params.name}, (err, sport) => {
         if(err){
-            req.flash('errors', {msg:'sport cannot be displayed'});
+            req.flash('errors', {msg:'sport cannot be displayed.'});
         }
         res.render('sport/sport', {sport:sport});
     });
 };
 
+exports.deleteSport = (req, res) => {
+    Sport.remove({name:req.body.name},(err) => {
+        if(err){
+            req.flash('errors', {msg:'you cannot delete me.'})
+        }
+        res.redirect('/sportslist');
+    });
+};
+
+exports.updateSportForm = (req, res) => {
+    Sport.findOne({name: req.params.name}, (err, sport) => {
+
+        res.render('sport/update', {
+            sport: sport
+        });
+
+    });
+};
+
+exports.updateSport = (req, res) => {
+   var conditions = {_id:req.body.id};
+   var update = req.body;
+    Sport.update(conditions, update, (err, x)=>{
+        res.redirect('/sportslist');
+    });
+
+};
+
+// };
+
+/*Model.remove({ _id: req.body.id }, function(err) {
+    if (!err) {
+        message.type = 'notification!';
+    }
+    else {
+        message.type = 'error';
+    }
+});*/
 /*
 exports.getLogin = (req, res) => {
     if (req.user) {

@@ -1,12 +1,17 @@
 extends ../layout
 
 block content
+    style(type="text/css").
+        .updateForm
+            {
+              display:none;
+            }
     .page-header
         h3 Sport
-    ul
-       li= sport.name
-       li= sport.type
-    form.form-horizontal(method='POST' action='/deletesport')
+    ul.sportForm
+         li#name1= sport.name
+         li= sport.type
+    form.form-horizontal.sportForm(method='POST' action='/deletesport')
         input(type='hidden', name='_csrf', value=_csrf)
         input(type='hidden', name='name', value=sport.name)
         .form-group
@@ -15,8 +20,28 @@ block content
                     i.fa.fa-user-plus
                     | Delete
     .col-sm-offset-3.col-sm-7
-        a.btn.btn-success(type='submit' href='/update/'+sport.name)
+        a.btn.btn-success.sportForm#update(type="submit")
             i.fa.fa-user-plus
             | Update
+
+    form.form-horizontal.updateForm(method='POST' action='/updatesport')
+        input(type='hidden', name='_csrf', id='_csrf', value=_csrf)
+        .form-group
+            label.col-sm-3.control-label(for='id')
+            .col-sm-7
+                input.form-control(type='hidden', name='id', id='id', value=sport.id autofocus, required)
+        .form-group
+            label.col-sm-3.control-label(for='name') Sport Name
+            .col-sm-7
+                input.form-control(type='text', name='name', id='name', value=sport.name autofocus, required)
+        .form-group
+            label.col-sm-3.control-label(for='type') Sport Type
+            .col-sm-7
+                input.form-control(type='text', name='type', id='type',value=sport.type, required)
+        .form-group
+            .col-sm-offset-3.col-sm-7
+                button.btn.btn-success#updateServer(type='submit')
+                    i.fa.fa-user-plus
+                    | Update
 
 

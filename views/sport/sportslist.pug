@@ -1,10 +1,21 @@
 extends ../layout
 
 block content
-    .page-header
+    .page-header.yeah
         h3 Sports list;
-    ul
+
         each sport in sports
+          div
             li= sport.name
+            li= sport.type
+           // li
+              button.btn.btn-danger(id=sport.id onClick=deletesport(this.id))
+                | Delete
+
         else
+          div
             li There are no values
+
+        div
+           li.show FuckOff
+

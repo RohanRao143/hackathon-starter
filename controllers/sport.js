@@ -78,8 +78,8 @@ exports.updateSportForm = (req, res) => {
 exports.updateSport = (req, res) => {
    var conditions = {_id:req.body.id};
    var update = req.body;
-    Sport.update(conditions, update, (err, x)=>{
-        res.redirect('/sportslist');
+    Sport.findOneAndUpdate(conditions, update,{new:true}, (err, x)=>{
+        res.json(x);
     });
 
 };

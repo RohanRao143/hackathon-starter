@@ -153,7 +153,9 @@ app.post('/createvenue',venueController.createVenue);
 app.post('/updatevenue/:id',venueController.updateVenue);
 app.get('/venueslist',venueController.venueList);
 app.post('/deletevenue/:id',venueController.deleteVenue);
-
+//sport subdoc of venue
+app.post('/deletesporttype/:id/:sportid',venueController.deleteSportType);
+app.get('/listallsporttypes/:id',venueController.listAllSportTypes);
 /**
  * API examples routes.
  */

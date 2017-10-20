@@ -25,19 +25,28 @@ $(document).ready(function() {
 
         });
 
-      /*  $("button").click(function() {
-            alert($(this).attr('id'))
-        });
-*//*
-        function deletesport(x){
-            alert(x);
-        }
-*/
+
 
 
     });
 
 
+    $("button").click(function () {
+        var csrf = $(this).attr("csrf");
+        var id = this.id;
+        var request = $.ajax({
+            url:'/deletesport',
+            type:'POST',
+            data:{_csrf:csrf , id:id}
+        });
+        request.done(function () {
+            $("."+id).remove();
+            console.log("huray");
+        });
+        request.fail(function () {
+            console.log("Boom")
+        })
+    });
 
 
   /*  var buttons = document.getElementsByTagName("button");

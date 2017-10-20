@@ -5,11 +5,11 @@ block content
         h3 Sports list;
 
         each sport in sports
-          div
+          div(class=sport.id)
             li= sport.name
             li= sport.type
-           // li
-              button.btn.btn-danger(id=sport.id onClick=deletesport(this.id))
+            input(type='hidden', name='_csrf', id='_csrf', value=_csrf)
+            button.btn.btn-danger(id=sport.id csrf=_csrf)
                 | Delete
 
         else
@@ -19,3 +19,4 @@ block content
         div
            li.show FuckOff
 
+.

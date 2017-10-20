@@ -10,7 +10,7 @@ block content
         h3 Sport
     ul.sportForm
          li#name1= sport.name
-         li= sport.type
+         li#type1= sport.type
     form.form-horizontal.sportForm(method='POST' action='/deletesport')
         input(type='hidden', name='_csrf', value=_csrf)
         input(type='hidden', name='name', value=sport.name)

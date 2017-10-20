@@ -1,0 +1,4 @@
+#To check if any to venues have same names
+
+    #we will do equality test for both of the venue names by using their venue objects
+    #ignore spaces , underscores, cases of letters

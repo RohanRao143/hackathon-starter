@@ -36,6 +36,7 @@ const apiController = require('./controllers/api');
 const contactController = require('./controllers/contact');
 
 const sportController = require('./controllers/sport');
+const venueController = require('./controllers/venue');
 /**
  * API keys and Passport configuration.
  */
@@ -87,15 +88,15 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-app.use((req, res, next) => {
-  if (req.path === '/api/upload') {
-    next();
-  } else {
-    lusca.csrf()(req, res, next);
-  }
-});
-app.use(lusca.xframe('SAMEORIGIN'));
-app.use(lusca.xssProtection(true));
+// app.use((req, res, next) => {
+//   if (req.path === '/api/upload') {
+//     next();
+//   } else {
+//     lusca.csrf()(req, res, next);
+//   }
+// });
+// app.use(lusca.xframe('SAMEORIGIN'));
+// app.use(lusca.xssProtection(true));
 app.use((req, res, next) => {
   res.locals.user = req.user;
   next();
@@ -137,6 +138,7 @@ app.post('/account/password', passportConfig.isAuthenticated, userController.pos
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
 
+//Sports
 app.get('/createSportForm', sportController.createSportForm);
 app.post('/createSport', sportController.createSport);
 app.get('/sportslist', sportController.listSports);
@@ -145,6 +147,12 @@ app.post('/deletesport',sportController.deleteSport);
 app.get('/update/:name',sportController.updateSportForm);
 app.post('/updatesport',sportController.updateSport);
 
+
+//venue
+app.post('/createvenue',venueController.createVenue);
+app.post('/updatevenue/:id',venueController.updateVenue);
+app.get('/venueslist',venueController.venueList);
+app.post('/deletevenue/:id',venueController.deleteVenue);
 
 /**
  * API examples routes.

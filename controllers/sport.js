@@ -23,20 +23,21 @@ exports.createSport = (req, res, next) => {
        type: req.body.type
     });
 
-    Sport.findOne({name:req.body.name}, (err, exisitingSport) => {
-        if(err){ return next(err); }
+    Sport.findOne({name:req.body.name,type:req.body.type}, (err, exisitingSport) => {
+        if(err){
+           res.json({input:"fill all the forms", error:err});
+            return next(err);
+        }
         if(exisitingSport){
-            req.flash('errors', {msg:'sport already exists.'});
-            return res.redirect('/createSportForm');
+            // return res.redirect('/createSportForm');
+            return res.json({existingsport:exisitingSport});
         }
 
         sport.save((err) => {
             if(err){
-                req.flash('errors', {msg:'sport cannot be saved'});
-
-                return res.redirect('/createSportForm');
-
+                req.json({err:err,msg:"sport cannot be saved"});
             }
+            return res.json({body:req.body});
         });
     });
 };
@@ -57,7 +58,7 @@ exports.displaySport = (req, res) => {
 };
 
 exports.deleteSport = (req, res) => {
-    Sport.remove({name:req.body.name},(err) => {
+    Sport.remove({_id:req.body.id},(err) => {
         if(err){
             req.flash('errors', {msg:'you cannot delete me.'})
         }

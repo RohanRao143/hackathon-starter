@@ -1,15 +1,24 @@
 const Venue = require('../models/Venue');
 const crypto = require('crypto');
+const path = require('path');
+const multer = require('multer');
+const readChunk = require('read-chunk');
+const fileType = require('file-type');
+
 
 const storage = multer.diskStorage({
+    destination: function (req,file,callback) {
+        callback(null,'./uploads');
+    },
     filename:function (req,file,callback) {
+
         crypto.pseudoRandomBytes(16, function (err, raw) {
-            if(err) return callback(err)
+            if(err) return callback(err);
             callback(null, raw.toString('hex')+path.extname(file.originalname))
         })
     }});
 
-const upload = multer({ dest: path.join(__dirname, 'uploads'), storage:storage });
+var  upload = multer({storage:storage });
 
 
 
@@ -141,17 +150,33 @@ exports.listAllSportTypes=(req,res)=>{
 };
 
 
-exports.uploadImage=(req,res)=>{
-    upload.single('images')
-  if(req.file){
-     console.dir(req.file);
-     req.file.filename= req.file.filename+'.jpg';
 
-     console.log(req.file.filename);
-     return res.end("thanku")
-  }
-  else{
-      res.end("missing file");
-  }
+
+var upload1 = upload.single('images');
+exports.uploadImage=(req,res)=>{
+    upload1(req,res, function(err){
+        const buffer = readChunk.sync('./uploads/'+req.file.originalname,0,4100);
+        fileType(buffer);
+        var type=fileType(buffer);
+
+        var filename = req.file.path.replace(/^.*[\\\/]/, '');
+        console.log(filename);
+
+        if(err){
+            res.end('error');
+        }
+        res.end('file is uploaded')
+    });
+
+  // if(req.file){
+  //    console.dir(req.file);
+  //    req.file.filename= req.file.filename+'.jpg';
+  //
+  //    console.log(req.file.filename);
+  //    return res.end("thanku")
+  // }
+  // else{
+  //     res.end("missing file");}
+
 };
 

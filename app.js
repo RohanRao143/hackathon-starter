@@ -20,7 +20,8 @@ const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
 const multer = require('multer');
 
-const upload = multer({ dest: path.join(__dirname, 'uploads') });
+
+
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
@@ -156,6 +157,12 @@ app.post('/deletevenue/:id',venueController.deleteVenue);
 //sport subdoc of venue
 app.post('/deletesporttype/:id/:sportid',venueController.deleteSportType);
 app.get('/listallsporttypes/:id',venueController.listAllSportTypes);
+
+
+
+
+
+app.post('/upload',venueController.uploadImage);
 /**
  * API examples routes.
  */

@@ -1,5 +1,15 @@
 const Venue = require('../models/Venue');
+const crypto = require('crypto');
 
+const storage = multer.diskStorage({
+    filename:function (req,file,callback) {
+        crypto.pseudoRandomBytes(16, function (err, raw) {
+            if(err) return callback(err)
+            callback(null, raw.toString('hex')+path.extname(file.originalname))
+        })
+    }});
+
+const upload = multer({ dest: path.join(__dirname, 'uploads'), storage:storage });
 
 
 
@@ -7,6 +17,16 @@ const Venue = require('../models/Venue');
 * Creates a venue
 */
 exports.createVenue = (req,res) => {
+    req.checkBody("email","enter a valid email address").isEmail();
+    req.checkBody("phone","enter a valid mobile number").optional().isMobilePhone("en-gb");
+
+    var validationErrors = req.validationErrors();
+    if(validationErrors) {
+        res.send(validationErrors);
+        return;
+    }
+    else{
+
     const venue = new Venue({
         name: req.body.name,
         address: req.body.address,
@@ -27,18 +47,32 @@ exports.createVenue = (req,res) => {
         return res.json({venue:venue});
     });
 
+    }
+
+
 };
 
 /*
 *Updates a venue
 */
 exports.updateVenue = (req,res) => {
-    Venue.findOneAndUpdate({_id:req.params.id},req.body,{new:true},(err,venue)=>{
-        if(err){
-            return res.json({errors:err,msg:'venue cannot be updated'});
-        }
-        return res.json({updatedVenue:venue});
-    });
+    req.checkBody("email","please enter a valid email address").isEmail();
+    req.checkBody("phone","please enter a valid phone number").optional().isMobilePhone("en-gb");
+
+    var validationErrors = req.validationErrors();
+    if(validationErrors){
+        res.send(validationErrors);
+        return;
+    }
+    else{
+        Venue.findOneAndUpdate({_id:req.params.id},req.body,{new:true},(err,venue)=>{
+            if(err){
+                return res.json({errors:err,msg:'venue cannot be updated'});
+            }
+            return res.json({updatedVenue:venue});
+        });
+    }
+
 };
 
 /*
@@ -104,5 +138,20 @@ exports.listAllSportTypes=(req,res)=>{
      // x();
      res.json({SportTypes:venue[0].sport});
   });
+};
+
+
+exports.uploadImage=(req,res)=>{
+    upload.single('images')
+  if(req.file){
+     console.dir(req.file);
+     req.file.filename= req.file.filename+'.jpg';
+
+     console.log(req.file.filename);
+     return res.end("thanku")
+  }
+  else{
+      res.end("missing file");
+  }
 };
 

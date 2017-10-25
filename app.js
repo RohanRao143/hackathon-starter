@@ -156,12 +156,17 @@ app.post('/deletevenue/:id',venueController.deleteVenue);
 //sport subdoc of venue
 app.post('/deletesporttype/:id/:sportid',venueController.deleteSportType);
 app.get('/listallsporttypes/:id',venueController.listAllSportTypes);
+app.post('/deletephoto/:id/:photoid',venueController.deleteVenuePhoto);
+//review subdoc of venue
+app.post('/createreview/:id',venueController.createReview);
+app.post('/deletereview/:id/:reviewid',venueController.deleteReview);
+app.post('/updatereview/:id/:reviewid',venueController.updateReview);
+app.get('/listallreviews/:id',venueController.listreviews);
 
 
 
 
-
-app.post('/upload',venueController.uploadImage);
+//app.post('/upload',venueController.uploadImage);
 /**
  * API examples routes.
  */

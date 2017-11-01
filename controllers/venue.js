@@ -141,7 +141,18 @@ exports.deleteVenue =(req,res)=>{
 };
 
 
-
+/*
+* create a sport sub documnet in venue document
+*/
+exports.createsporttype =(req,res)=>{
+  Venue.findOneAndUpdate({_id:req.params.id},{$push:{sport:{name:req.body.name}}},{returnNewDocument:true},
+      (err,venue)=>{
+          if(err){
+              res.json({errors:err});
+          }
+          res.json({sportTypes:venue.sport});
+      })
+};
 
 /*
 * delete a sport sub document in venue document
@@ -164,7 +175,7 @@ exports.deleteSportType=(req,res) =>{
 };
 
 /*
-* listing all sport subdocs of al docs
+* lists all sport subdocs of al docs
 */
 exports.listAllSportTypes=(req,res)=>{
   Venue.findOne({_id:req.params.id},(err,venue)=>{
@@ -184,6 +195,9 @@ exports.listAllSportTypes=(req,res)=>{
   });
 };
 
+/*
+*
+*/
 
 
 
@@ -203,7 +217,9 @@ exports.listAllSportTypes=(req,res)=>{
 
 
 
-// Reviews
+/*
+Reviews
+*/
 exports.createReview = (req,res)=>{
     Venue.findOneAndUpdate({_id:req.params.id},
         {$push:{'review':{
@@ -257,7 +273,10 @@ exports.listreviews =(req, res)=>{
 };
 
 
-//photos
+/*
+photos
+ */
+//create photo
 exports.createvenuephoto = (req,res)=>{
 
     var venueImages = [];
@@ -299,6 +318,17 @@ exports.createvenuephoto = (req,res)=>{
     });
 };
 
+//list photos
+exports.listVenuePhotos = (req,res)=>{
+    Venue.findOne({_id:req.params.id},(err,venue)=>{
+       if(err){
+           res.json({errors:err});
+       }
+       res.json({VenuePhotos:venue.photos})
+    });
+};
+
+//del photo
 exports.deleteVenuePhoto = (req,res) =>{
     console.log("got it");
     Venue.findOne({_id:req.params.id},(err,venue)=> {
@@ -306,7 +336,7 @@ exports.deleteVenuePhoto = (req,res) =>{
             res.json({error:err});
         }
 
-        console.log(venue.photos.id(req.params.photoid))
+        console.log(venue.photos.id(req.params.photoid));
         fileSystem.unlink(venue.photos.id(req.params.photoid).path);
         venue.photos.id(req.params.photoid).remove();
         venue.save(function (err) {
@@ -318,3 +348,4 @@ exports.deleteVenuePhoto = (req,res) =>{
     });
 };
 
+//
